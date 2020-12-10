@@ -1,0 +1,25 @@
+﻿@model List<ClientInfo>
+<div class="row col-md-12">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Client Name</th>
+                <th scope="col">Visa Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                @foreach (ClientInfo ClientObj in Model)
+                {
+                    <tr>
+                        <td>@ClientObj.Id</td>
+                        <td>@ClientObj.ClientName</td>
+                        <td>@ClientObj.VisaNo</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

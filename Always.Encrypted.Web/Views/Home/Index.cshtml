@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model List<ClientInfo>
+<div class="text-center">
+    <h6 style="margin-bottom:100px;margin-top:50px">Welcome to Always Encrypted Application</h6>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <p>Client Name:</p>
+    </div>
+    <div class="col-md-3">
+        <input type="text" id="clientName" maxlength="50" />
+    </div>
+    <div class="col-md-2">
+        <p>Visa No:</p>
+    </div>
+    <div class="col-md-3">
+        <input type="text" id="visaNo" maxlength="16" />
+    </div>
+    <div class="col-md-2">
+        <input type="button" id="btnAddNewClient" value="Add!" onclick="addNewClient()" />
+    </div>
+</div>
+<div id="clientInfo">
+    @await Html.PartialAsync("~/Views/Home/_PartialViewClientData.cshtml", Model)
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        function addNewClient() {
+            var clientName = $("#clientName").val();
+            var visaNo = $("#visaNo").val();
+            if (clientName.length < 1 || visaNo.length < 1) {
+                alert('incomplete data!');
+                return;
+            }
+
+            var newClientObj = {
+                ClientName: clientName,
+                VisaNo: visaNo
+            };
+
+            $.ajax({
+                //base address/controller/Action
+                url: '@Url.Action("AddClientData", "Home")',
+                dataType: "json",
+                type: 'POST',
+                data: newClientObj,
+                success: function (returnedValue) {
+                    //write something as it went wrong
+                    getClientData();
+                },
+                error: function (ex) {
+                    console.log(ex);
+                    alert(ex);
+                    alert("Error Occured");
+                }
+            });
+        }
+
+       function getClientData() {
+            $.ajax({
+                //base address/controller/Action
+                url: '@Url.Action("_PartialViewClientData", "Home")',
+                type: 'GET',
+                success: function (html) {
+                    //write something as it went wrong
+                    $('#clientInfo').html(html);
+                },
+                error: function (ex) {
+                    console.log(ex);
+                    alert(ex);
+                    alert("Error Occured");
+                }
+            });
+        }
+
+    </script>
+}
